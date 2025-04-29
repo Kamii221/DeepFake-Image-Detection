@@ -19,8 +19,8 @@ This web application provides an interface for detecting deepfake images using d
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/deepfake-detection-web.git
-cd deepfake-detection-web
+git clone https://github.com/Kamii221/DeepFake-Image-Detection.git
+cd DeepFake-Image-Detection
 ```
 
 2. Create a virtual environment (recommended):
