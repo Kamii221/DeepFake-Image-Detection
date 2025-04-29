@@ -1,3 +1,105 @@
+# Deepfake Image Detection Web Application
+
+This web application provides an interface for detecting deepfake images using deep learning. It uses EfficientNet and Vision Transformers to analyze uploaded images and determine if they are real or manipulated.
+
+## Features
+
+- Modern, responsive web interface
+- Drag-and-drop image upload
+- Real-time image analysis
+- Confidence score display
+- Support for common image formats (PNG, JPG, JPEG)
+
+## Prerequisites
+
+- Python 3.7 or higher
+- pip (Python package manager)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/deepfake-detection-web.git
+cd deepfake-detection-web
+```
+
+2. Create a virtual environment (recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install the required packages:
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+1. Start the Flask application:
+```bash
+python app.py
+```
+
+2. Open your web browser and navigate to:
+```
+http://localhost:5000
+```
+
+3. Upload an image using the drag-and-drop interface or file browser
+
+4. Click "Analyze Image" to process the upload
+
+5. View the results showing whether the image is real or fake, along with a confidence score
+
+## Project Structure
+
+```
+deepfake_detection_web/
+├── app.py              # Flask application
+├── requirements.txt    # Python dependencies
+├── templates/         
+│   └── index.html     # Web interface
+└── uploads/           # Temporary storage for uploaded images
+```
+
+## Model Integration
+
+The current implementation includes a placeholder for the deepfake detection model. To integrate your trained model:
+
+1. Place your model file in the project directory
+2. Update the `load_model()` function in `app.py`
+3. Modify the preprocessing steps in `preprocess_image()` if needed
+4. Update the prediction code in the `analyze_image()` route
+
+## Security Notes
+
+- The application includes file type validation
+- Uploaded files are automatically deleted after processing
+- Maximum file size is limited to 16MB
+- Only specific image formats are allowed
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # DeepFake-Image-Detection
 A hybrid deep learning model combining EfficientNet and Vision Transformers for accurate deepfake image detection. Trained on FF++ and DFDC datasets, the model improves feature extraction, generalization, and precision across manipulated media.Aim
 The aim of this project is to develop an improved deepfake detection model for images
