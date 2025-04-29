@@ -1,6 +1,5 @@
 # DeepFake-Image-Detection
-AI-based deepfake detection using deep learning. Identifies manipulated media by analyzing facial inconsistencies, lighting, and pixel artifacts. Aims to protect digital integrity by helping users and organizations verify the authenticity of images.
-Aim
+A hybrid deep learning model combining EfficientNet and Vision Transformers for accurate deepfake image detection. Trained on FF++ and DFDC datasets, the model improves feature extraction, generalization, and precision across manipulated media.Aim
 The aim of this project is to develop an improved deepfake detection model for images
 by integrating EfficientNet in place of CNN and Vision Transformers (ViTs) instead
 of RNN, enhancing accuracy in identifying manipulated content. By leveraging the
