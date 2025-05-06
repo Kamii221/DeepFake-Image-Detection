@@ -15,42 +15,12 @@ This web application provides an interface for detecting deepfake images using d
 - Python 3.7 or higher
 - pip (Python package manager)
 
-## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Kamii221/DeepFake-Image-Detection.git
-cd DeepFake-Image-Detection
-```
+1. Upload an image using the drag-and-drop interface or file browser
 
-2. Create a virtual environment (recommended):
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+2. Click "Analyze Image" to process the upload
 
-3. Install the required packages:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-1. Start the Flask application:
-```bash
-python app.py
-```
-
-2. Open your web browser and navigate to:
-```
-http://localhost:5000
-```
-
-3. Upload an image using the drag-and-drop interface or file browser
-
-4. Click "Analyze Image" to process the upload
-
-5. View the results showing whether the image is real or fake, along with a confidence score
+3. View the results showing whether the image is real or fake, along with a confidence score
 
 ## Project Structure
 
