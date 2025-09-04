@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Analysis Result</h1>
+        <div class="result">
+            <h2>Classification: {{ result }}</h2>
+            <p>Confidence Score: {{ confidence | round(2) }}</p>
+            <p>Model Used: {{ model_used }}</p>
+            <p>Activation Type: {{ activation_type }}</p>
+            <p>Analysis Timestamp: {{ analysis_timestamp }}</p>
+            <h3>Image Information:</h3>
+            <ul>
+                <li>Dimensions: {{ image_info.dimensions }}</li>
+                <li>Format: {{ image_info.format }}</li>
+                <li>Mode: {{ image_info.mode }}</li>
+                <li>Size: {{ image_info.size_kb | round(2) }} KB</li>
+                <li>Channels: {{ image_info.channels }}</li>
+                {% if image_info.avg_color %}
+                <li>Average Color: {{ image_info.avg_color }}</li>
+                {% endif %}
+                {% if image_info.brightness %}
+                <li>Brightness: {{ image_info.brightness }}</li>
+                {% endif %}
+            </ul>
+            <a href="/">Back to Upload</a>
+        </div>
+    </div>
+</body>
+</html>

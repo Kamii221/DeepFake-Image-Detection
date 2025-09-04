@@ -1,0 +1,6 @@
+The weights directory is intended to store the trained model weights files, which are typically binary files generated after training a model. These files cannot be generated as text content. Instead, they should be created through the training process of the models. 
+
+For the purpose of this project, you can create a placeholder file to indicate where the model weights will be stored. Here is the content for the file:
+
+# This file is intentionally left blank. 
+# Model weights will be generated and saved here after training the models.

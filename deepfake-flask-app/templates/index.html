@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DeepFake Detection System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      max-width: 700px;
+      width: 100%;
+      padding: 30px 40px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    header h1 .brain-icon {
+      font-size: 1.5rem;
+    }
+    header p {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0.85;
+    }
+    form {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px 25px;
+      box-shadow: inset 0 0 10px #ddd;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .file-upload-label {
+      display: inline-block;
+      background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: center;
+      width: fit-content;
+      transition: background 0.3s ease;
+    }
+    .file-upload-label:hover {
+      background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+    }
+    input[type="file"] {
+      display: none;
+    }
+    select {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    select:focus {
+      border-color: #6a11cb;
+      box-shadow: 0 0 5px #6a11cb;
+    }
+    button.analyze-btn {
+      background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 0;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    button.analyze-btn:hover {
+      background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+    }
+    .result-section {
+      background: #f0f4f8;
+      border-radius: 12px;
+      padding: 20px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+    .result-header .status-icon {
+      font-size: 1.3rem;
+    }
+    .result-details p {
+      margin: 6px 0;
+      font-size: 0.95rem;
+    }
+    .confidence-bar {
+      width: 100%;
+      height: 14px;
+      border-radius: 10px;
+      background: linear-gradient(to right, #4caf50, #ffeb3b, #f44336);
+      margin: 10px 0 20px 0;
+      position: relative;
+    }
+    .confidence-fill {
+      height: 100%;
+      border-radius: 10px;
+      background-color: #4caf50;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .available-models {
+      background: #e8f0fe;
+      border-radius: 12px;
+      padding: 20px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .available-models h3 {
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #1a237e;
+    }
+    .model-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+    .model-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 0.9rem;
+      color: #333;
+    }
+    .model-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #3f51b5;
+    }
+    .error-message {
+      color: #d32f2f;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="brain-icon">🧠</span> DeepFake Detection System</h1>
+      <p>Advanced Multi-Model Architecture for Identifying Manipulated Media</p>
+    </header>
+
+    {% if error %}
+      <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <form action="/analyze" method="post" enctype="multipart/form-data">
+      <label for="file" class="file-upload-label">📷 Choose Image File</label>
+      <input type="file" id="file" name="file" required />
+      <span id="file-name" style="display: block; margin-top: 5px; font-size: 0.9rem; color: #666;"></span>
+
+      <select name="model_type" id="model_type" required>
+        <option value="">Select Model Type</option>
+        <option value="efficientnet">EfficientNet</option>
+        <option value="resnet">ResNet</option>
+        <option value="vit">ViT</option>
+        <option value="ensemble">Ensemble</option>
+        <option value="deepfake_pipeline">Deepfake Pipeline</option>
+        <option value="hybrid">Hybrid (ResNet + ViT + EffNet)</option>
+      </select>
+
+      <select name="activation" id="activation">
+        <option value="">Select Activation (if required)</option>
+        <option value="gelu">GELU</option>
+        <option value="leakyrelu">LeakyReLU</option>
+        <option value="relu">ReLU</option>
+      </select>
+
+      <button type="submit" class="analyze-btn">🔍 Analyze Image</button>
+    </form>
+
+    {% if analysis_result %}
+    <section class="result-section">
+      <div class="result-header">
+        {% if analysis_result.result == 'real' %}
+          <span class="status-icon" style="color: green;">&#x2705;</span>
+          <span>Result: REAL</span>
+        {% else %}
+          <span class="status-icon" style="color: red;">&#x274C;</span>
+          <span>Result: FAKE</span>
+        {% endif %}
+      </div>
+      <div class="result-details">
+        <img src="{{ analysis_result.image_url }}" alt="Uploaded Image" style="max-width: 100%; border-radius: 12px; margin-bottom: 15px;" />
+        <p><strong>Model:</strong> {{ analysis_result.model_used }}</p>
+        <p><strong>Activation:</strong> {{ analysis_result.activation_type }}</p>
+        <p><strong>Confidence:</strong> {{ (analysis_result.confidence * 100) | round(2) }}%</p>
+        <div class="confidence-bar" aria-label="Confidence bar">
+          <div class="confidence-fill" style="width: {{ (analysis_result.confidence * 100) | round(2) }}%;"></div> 
+        </div>
+        <p><strong>Analysis Details:</strong></p>
+        <p>{{ analysis_result.description }}</p>
+        <p><strong>Image Info:</strong> {{ analysis_result.image_info.dimensions }}, {{ analysis_result.image_info.format }}, {{ analysis_result.image_info.size_kb | round(2) }} KB</p>
+        <p><strong>Analysis Time:</strong> {{ analysis_result.analysis_timestamp }}</p>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="available-models">
+      <h3>Available Models</h3>
+      <div class="model-cards">
+        <div class="model-card">
+          <strong>B0</strong>
+          GELU Activation<br />
+          Lightweight model optimized for faster processing
+        </div>
+        <div class="model-card">
+          <strong>B0</strong>
+          LeakyReLU Activation<br />
+          Enhanced gradient flow for better learning
+        </div>
+        <div class="model-card">
+          <strong>B1</strong>
+          GELU Activation<br />
+          Improved accuracy with moderate speed
+        </div>
+        <div class="model-card">
+          <strong>B1</strong>
+          LeakyReLU Activation<br />
+          Better handling of negative values
+        </div>
+        <div class="model-card">
+          <strong>EN</strong>
+          GELU Activation<br />
+          Combined power of EfficientNet and ViT
+        </div>
+        <div class="model-card">
+          <strong>EN</strong>
+          LeakyReLU Activation<br />
+          Enhanced ensemble with LeakyReLU
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById('file').addEventListener('change', function() {
+      var fileName = this.files[0] ? this.files[0].name : '';
+      document.getElementById('file-name').textContent = fileName ? 'Selected: ' + fileName : '';
+    });
+
+    // Handle model type change to show/hide activation field
+    document.getElementById('model_type').addEventListener('change', function() {
+      var modelType = this.value;
+      var activationSelect = document.getElementById('activation');
+      var activationLabel = activationSelect.previousElementSibling;
+
+      // Models that don't require activation
+      var noActivationModels = ['resnet', 'vit', 'deepfake_pipeline', 'hybrid'];
+
+      if (noActivationModels.includes(modelType)) {
+        activationSelect.style.display = 'none';
+        if (activationLabel && activationLabel.tagName === 'LABEL') {
+          activationLabel.style.display = 'none';
+        }
+        activationSelect.required = false;
+        activationSelect.value = ''; // Clear any selected value
+      } else {
+        activationSelect.style.display = 'block';
+        if (activationLabel && activationLabel.tagName === 'LABEL') {
+          activationLabel.style.display = 'block';
+        }
+        activationSelect.required = true;
+      }
+    });
+
+    // Trigger the change event on page load to set initial state
+    document.getElementById('model_type').dispatchEvent(new Event('change'));
+  </script>
+</body>
+</html>
