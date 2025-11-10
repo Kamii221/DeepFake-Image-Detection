@@ -1,0 +1,37 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - 'releases/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Ensures full git history for accurate analysis
+          fetch-depth: 0
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.sqp_b70c470e1ffc74390e40250cf46a990c144dbb6f }}
+          SONAR_HOST_URL: http://localhost:9000
+        with:
+          args: >
+            -Dsonar.projectKey=Deepfake  
+            -Dsonar.projectName=Deepfake
+            -Dsonar.sources=.
+            -Dsonar.language=python
+            -Dsonar.python.version=3.13
+            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/*.md,**/*.yml
+            -Dsonar.sourceEncoding=UTF-8
