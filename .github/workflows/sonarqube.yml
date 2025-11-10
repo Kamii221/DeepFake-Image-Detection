@@ -18,20 +18,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Ensures full git history for accurate analysis
-          fetch-depth: 0
+          fetch-depth: 0  # Ensures full history for accurate analysis
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: sonarsource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: ${{ secrets.sqp_b70c470e1ffc74390e40250cf46a990c144dbb6f }}
+          SONAR_TOKEN: sqp_b70c470e1ffc74390e40250cf46a990c144dbb6f
           SONAR_HOST_URL: http://localhost:9000
         with:
           args: >
-            -Dsonar.projectKey=Deepfake  
+            -Dsonar.projectKey=Deepfake
             -Dsonar.projectName=Deepfake
             -Dsonar.sources=.
             -Dsonar.language=python
             -Dsonar.python.version=3.13
-            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/*.md,**/*.yml
             -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/*.md,**/*.yml
