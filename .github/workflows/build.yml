@@ -25,12 +25,12 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}      # Secure token from GitHub Secrets
+          SONAR_TOKEN: 4ab3fe1b0ca8dbb5f6352153a4f8b333f29acc9a     # Secure token from GitHub Secrets
           SONAR_HOST_URL: https://sonarcloud.io
         with:
           args: >
             -Dsonar.projectKey=Deepfake1
-            -Dsonar.organization=your_org_name_here      
+            -Dsonar.organization=4ab3fe1b0ca8dbb5f6352153a4f8b333f29acc9a  
             -Dsonar.projectName=Deepfake1
             -Dsonar.sources=.
             -Dsonar.language=python
