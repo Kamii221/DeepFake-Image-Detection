@@ -1,18 +1,15 @@
-name: Main Workflow
+name: Build
 
 on:
   push:
     branches:
       - main
-      - master
-      - develop
-      - 'releases/**'
-  pull_request:
-    types: [opened, synchronize, reopened]
+
 
 jobs:
-  sonarqube:
-    runs-on: window-latest
+  build:
+    name: Build and analyze
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
