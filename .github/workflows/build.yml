@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build and analyze
@@ -17,14 +16,21 @@ jobs:
         with:
           fetch-depth: 0  # Ensures full history for accurate analysis
 
-      - name: SonarQube Scan
+      - name: Set up JDK (required for SonarScanner)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: squ_1c9e74fd2f17df1775c7542c0938a1d99582573b
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}      # Secure token from GitHub Secrets
           SONAR_HOST_URL: https://sonarcloud.io
         with:
           args: >
             -Dsonar.projectKey=Deepfake1
+            -Dsonar.organization=your_org_name_here      
             -Dsonar.projectName=Deepfake1
             -Dsonar.sources=.
             -Dsonar.language=python
